@@ -1,4 +1,4 @@
-# Blog for Meanstack project
+# Blog for Mean Stack project
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.1.
 
