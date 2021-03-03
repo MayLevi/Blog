@@ -1,8 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule,CUSTOM_ELEMENTS_SCHEMA  } from '@angular/core';
-import { ReactiveFormsModule  } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { ReactiveFormsModule ,FormsModule } from '@angular/forms';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {
   MatInputModule,
   MatCardModule,
@@ -18,19 +18,25 @@ import { PostListComponent } from './posts/post-list/post-list.component';
 import { CommonModule } from '@angular/common';
 import {AppRoutingModule} from './app-routing.module';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {LoginComponent} from './auth/login/login.component';
+import {SignupComponent} from './auth/signup/signup.component';
+import {AuthInterceptor} from './auth/auth-interceptor';
 
 @NgModule({
   declarations: [
     AppComponent,
     PostCreateComponent,
     PostListComponent,
-    HeaderComponent
+    HeaderComponent,
+    LoginComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     CommonModule,
     ReactiveFormsModule,
+    FormsModule,
     BrowserAnimationsModule,
     MatInputModule,
     MatCardModule,
@@ -42,7 +48,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     HttpClientModule
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
-  providers: [],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass:AuthInterceptor, multi:true}],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
