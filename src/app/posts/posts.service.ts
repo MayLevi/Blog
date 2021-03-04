@@ -94,7 +94,8 @@ export class PostsService {
         title: title,
         content: content,
         imagePath: image,
-        creator: null
+        creator: null,
+        userName: null
       };
     }
     this.http

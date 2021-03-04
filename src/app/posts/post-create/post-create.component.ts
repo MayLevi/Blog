@@ -49,7 +49,7 @@ export class PostCreateComponent implements OnInit {
         this.postsService.getPost(this.postId).subscribe(postData => {
           this.isLoading = false;
           // tslint:disable-next-line:max-line-length
-          this.post = {id: postData._id, title: postData.title, content: postData.content , imagePath: postData.imagePath, creator: postData.creator};
+          this.post = {id: postData._id, title: postData.title, content: postData.content , imagePath: postData.imagePath, creator: postData.creator,userName: null};
           this.form.setValue({
             title: this.post.title,
             content: this.post.content,

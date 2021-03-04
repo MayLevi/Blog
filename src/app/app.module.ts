@@ -24,6 +24,9 @@ import {AuthInterceptor} from './auth/auth-interceptor';
 import {StoryWrapperComponent} from '../react/StoryComponentWrapper';
 import {SocketIoConfig, SocketIoModule} from 'ngx-socket-io';
 import {PostSocketService} from './posts/post-socket.service';
+import { UsersListComponent } from './users/users-list/users-list.component';
+import {MatSelectModule} from '@angular/material/select';
+
 
 const socketIoConfig: SocketIoConfig = {
   url: 'http://localhost:3000', options: {}
@@ -37,7 +40,8 @@ const socketIoConfig: SocketIoConfig = {
     HeaderComponent,
     LoginComponent,
     SignupComponent,
-    StoryWrapperComponent
+    StoryWrapperComponent,
+    UsersListComponent,
   ],
   imports: [
     BrowserModule,
@@ -54,7 +58,8 @@ const socketIoConfig: SocketIoConfig = {
     MatPaginatorModule,
     MatProgressSpinnerModule,
     HttpClientModule,
-    SocketIoModule.forRoot(socketIoConfig)
+    SocketIoModule.forRoot(socketIoConfig),
+    MatSelectModule
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}, PostSocketService],

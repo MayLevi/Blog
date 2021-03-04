@@ -1,11 +1,14 @@
 <mat-toolbar color="primary">
   <span>
-    <a routerLink="/">My Blog</a>
+    <a routerLink="/">Fakebook</a>
   </span>
   <span class="spacer"></span>
   <ul>
     <li *ngIf="userIsAuthenticated">
       <a mat-button routerLink="/create" routerLinkActive="mat-accent">New Post</a>
+    </li>
+    <li *ngIf="userIsAuthenticated">
+      <a mat-button routerLink="/users" routerLinkActive="mat-accent">Users</a>
     </li>
     <li *ngIf="!userIsAuthenticated">
       <a mat-button routerLink="/login" routerLinkActive="mat-accent">Login</a>

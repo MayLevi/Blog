@@ -1,10 +1,23 @@
 <mat-spinner *ngIf="isLoading"></mat-spinner>
 <mat-accordion multi="true" *ngIf="posts.length > 0 && !isLoading">
+  <mat-form-field class="example-full-width">
+    <mat-label>Search Post</mat-label>
+    <input matInput>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+  <mat-label>Search by</mat-label>
+
+  <mat-select>
+    <mat-option *ngFor="let filter of filters" [value]="filter.name">
+      {{filter.name}}
+    </mat-option>
+  </mat-select>
+  </mat-form-field>
   <mat-expansion-panel *ngFor="let post of posts">
     <mat-expansion-panel-header>
      <p>{{ post.title}}</p>
     </mat-expansion-panel-header>
-    <p>{{ post.creator}}</p>
+    <strong>Posted by:</strong> <p>{{ post.userName}}</p>
     <div class="post-image">
       <img [src]="post.imagePath" [alt]="post.title">
     </div>
