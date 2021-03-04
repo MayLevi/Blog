@@ -21,6 +21,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {LoginComponent} from './auth/login/login.component';
 import {SignupComponent} from './auth/signup/signup.component';
 import {AuthInterceptor} from './auth/auth-interceptor';
+// @ts-ignore
+import {StoryWrapperComponent} from '../react/StoryComponentWrapper';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import {AuthInterceptor} from './auth/auth-interceptor';
     PostListComponent,
     HeaderComponent,
     LoginComponent,
-    SignupComponent
+    SignupComponent,
+    StoryWrapperComponent
   ],
   imports: [
     BrowserModule,
