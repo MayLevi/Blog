@@ -40,7 +40,6 @@ router.post(
       title: req.body.title,
       content: req.body.content,
       imagePath: url + "/images/" + req.file.filename,
-      createDate:req.body.createDate,
       creator: req.userData.userId
     });
     post.save().then(createdPost => {
@@ -69,7 +68,6 @@ router.put(
       title: req.body.title,
       content: req.body.content,
       imagePath: imagePath,
-      createDate:req.body.createDate,
       creator: req.userData.userId
     });
     console.log(post);
