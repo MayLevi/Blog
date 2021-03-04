@@ -40,7 +40,8 @@ router.post(
       title: req.body.title,
       content: req.body.content,
       imagePath: url + "/images/" + req.file.filename,
-      creator: req.userData.userId
+      creator: req.userData.userId,
+      createDate: new Date()
     });
     post.save().then(createdPost => {
       res.status(201).json({
@@ -115,6 +116,19 @@ router.delete("/:id",checkAuth, (req, res, next) => {
       res.status(200).json({message: "Update successful!"});
     }else{
       res.status(401).json({message: "Not"});
+    }
+  });
+});
+
+//group by
+router.get("/user/:id", (req, res, next) => {
+  Post.aggregate([
+    {"$group" : {_id:"$province", count:{$sum:1}}}
+  ]).then(post => {
+    if (post) {
+      res.status(200).json(post);
+    } else {
+      res.status(404).json({ message: "Post not found!" });
     }
   });
 });

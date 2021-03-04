@@ -7,10 +7,14 @@ import {User} from './user';
   providedIn: 'root'
 })
 export class UsersService {
-
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) {
+  }
   getUser(id: string) {
     return this.http.get<User>('http://localhost:3000/api/user/' + id);
+  }
+
+  getAllUsers() {
+    return this.http.get<User[]>('http://localhost:3000/api/user/');
   }
 
 }

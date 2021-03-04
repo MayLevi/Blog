@@ -8,7 +8,7 @@ import {
   MatCardModule,
   MatButtonModule,
   MatToolbarModule,
-  MatExpansionModule, MatPaginatorModule
+  MatExpansionModule, MatPaginatorModule, MatIconModule, MatTableModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -59,7 +59,9 @@ const socketIoConfig: SocketIoConfig = {
     MatProgressSpinnerModule,
     HttpClientModule,
     SocketIoModule.forRoot(socketIoConfig),
-    MatSelectModule
+    MatSelectModule,
+    MatIconModule,
+    MatTableModule
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
   providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}, PostSocketService],

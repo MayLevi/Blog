@@ -10,7 +10,8 @@ router.post("/signup", (req, res, next) => {
   bcrypt.hash(req.body.password, 10).then(hash => {
     const user = new User({
       email: req.body.email,
-      password: hash
+      password: hash,
+      isAdmin: false
     });
     user
       .save()
@@ -69,6 +70,16 @@ router.get("/:id", (req, res, next) => {
   User.findById(req.params.id).then(user => {
     if (user) {
       res.status(200).json(user);
+    } else {
+      res.status(404).json({ message: "User not found!" });
+    }
+  });
+});
+
+router.get("", (req, res, next) => {
+  User.find().then(users => {
+    if (users) {
+      res.status(200).json(users);
     } else {
       res.status(404).json({ message: "User not found!" });
     }

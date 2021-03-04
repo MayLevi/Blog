@@ -34,7 +34,8 @@ export class PostsService {
                 content: post.content,
                 id: post._id,
                 imagePath: post.imagePath,
-                creator: post.creator
+                creator: post.creator,
+                createDate: post.createDate
               };
             }),
             maxPosts: postData.maxPosts
@@ -61,6 +62,7 @@ export class PostsService {
       content: string;
       imagePath: string;
       creator: string;
+      createDate: Date;
     }>('http://localhost:3000/api/posts/' + id);
   }
 
@@ -95,7 +97,8 @@ export class PostsService {
         content: content,
         imagePath: image,
         creator: null,
-        userName: null
+        userName: null,
+        createDate: null,
       };
     }
     this.http

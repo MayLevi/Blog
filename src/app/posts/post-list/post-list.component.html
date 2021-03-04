@@ -2,21 +2,25 @@
 <mat-accordion multi="true" *ngIf="posts.length > 0 && !isLoading">
   <mat-form-field class="example-full-width">
     <mat-label>Search Post</mat-label>
-    <input matInput>
+    <input (keyup.enter)="search()" [(ngModel)]="searchString" matInput type="search">
+    <button mat-icon-button matSuffix (click)="search()">
+      <mat-icon>search</mat-icon>
+    </button>
   </mat-form-field>
+  <span style="padding-right: 3%"></span>
   <mat-form-field appearance="fill">
-  <mat-label>Search by</mat-label>
-
-  <mat-select>
-    <mat-option *ngFor="let filter of filters" [value]="filter.name">
-      {{filter.name}}
-    </mat-option>
-  </mat-select>
+    <mat-label>Search by Filter</mat-label>
+    <select [(ngModel)]="selectedFilter"  matNativeControl required>
+      <option value="postName">Post Title</option>
+      <option value="userName">Username</option>
+      <option value="Year">Year</option>
+    </select>
   </mat-form-field>
-  <mat-expansion-panel *ngFor="let post of posts">
+  <mat-expansion-panel *ngFor="let post of displayPosts">
     <mat-expansion-panel-header>
      <p>{{ post.title}}</p>
     </mat-expansion-panel-header>
+    <p>{{post.createDate | date}}</p>
     <strong>Posted by:</strong> <p>{{ post.userName}}</p>
     <div class="post-image">
       <img [src]="post.imagePath" [alt]="post.title">

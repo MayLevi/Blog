@@ -15,11 +15,12 @@ import {UsersService} from '../../users/users.service';
 export class PostListComponent implements OnInit, OnDestroy {
 
   posts: Post[] = [];
+  displayPosts: Post[] = [];
   isLoading = false;
   totalPosts = 0;
-  postsPerPage = 2;
+  postsPerPage = 5;
   currentPage = 1;
-  pageSizeOptions = [1, 2, 5, 10];
+  pageSizeOptions = [5, 10, 15, 20];
   userIsAuthenticated=false;
   userId:string;
   private authStatusSub: Subscription;
@@ -27,11 +28,10 @@ export class PostListComponent implements OnInit, OnDestroy {
   // @ts-ignore
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  filters: any[] = [
-    {name: 'Name'},
-    {name: 'Username'},
-    {name: 'Year'}
-  ];
+  selectedFilter ='postName';
+  searchString: any;
+
+
 
 
   constructor(public postsService: PostsService, private authService: AuthService, private  userService:UsersService) {}
@@ -49,6 +49,7 @@ export class PostListComponent implements OnInit, OnDestroy {
         this.posts.forEach(post => {
           this.userService.getUser(post.creator).subscribe(user => post.userName = user.email)
         })
+        this.displayPosts = this.posts;
       });
     this.userIsAuthenticated=this.authService.getIsAuth();
     this.authStatusSub=this.authService.getAuthStatusListener().subscribe(
@@ -78,5 +79,26 @@ export class PostListComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.postsSub.unsubscribe();
     this.authStatusSub.unsubscribe();
+  }
+
+  search() {
+    if(this.searchString){
+      switch (this.selectedFilter)
+      {
+        case "postName":
+          this.displayPosts = this.posts.filter(post =>  post.title.toLowerCase().indexOf(this.searchString.toLowerCase()) >= 0 );
+          break;
+        case "userName":
+          this.displayPosts = this.posts.filter(post =>  post.userName.toLowerCase().indexOf(this.searchString.toLowerCase()) >= 0 );
+          break;
+        case "Year":
+          this.displayPosts = this.posts.filter(post =>  new Date(post.createDate).getFullYear() == this.searchString );
+          break;
+      }
+    }
+    else{
+      this.displayPosts = this.posts;
+    }
+
   }
 }
