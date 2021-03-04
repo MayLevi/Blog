@@ -18,6 +18,7 @@ export class PostCreateComponent implements OnInit {
   isLoading = false;
   form: FormGroup;
   imagePreview: string;
+  ceateDate:string;
   private mode = "create";
   private postId: string;
 
@@ -47,7 +48,7 @@ export class PostCreateComponent implements OnInit {
         this.isLoading = true;
         this.postsService.getPost(this.postId).subscribe(postData => {
           this.isLoading = false;
-          this.post = {id: postData._id, title: postData.title, content: postData.content ,imagePath: postData.imagePath, creator:postData.creator};
+          this.post = {id: postData._id, title: postData.title, content: postData.content ,imagePath: postData.imagePath, creator:postData.creator, createDate:postData.createDate};
           this.form.setValue({
             title: this.post.title,
             content: this.post.content,
@@ -73,7 +74,8 @@ export class PostCreateComponent implements OnInit {
         this.postId,
         this.form.value.title,
         this.form.value.content,
-         this.form.value.image
+         this.form.value.image,
+        this.ceateDate
       );
     }
 

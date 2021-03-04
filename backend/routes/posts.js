@@ -40,6 +40,7 @@ router.post(
       title: req.body.title,
       content: req.body.content,
       imagePath: url + "/images/" + req.file.filename,
+      createDate:req.body.createDate,
       creator: req.userData.userId
     });
     post.save().then(createdPost => {
@@ -68,15 +69,12 @@ router.put(
       title: req.body.title,
       content: req.body.content,
       imagePath: imagePath,
+      createDate:req.body.createDate,
       creator: req.userData.userId
     });
     console.log(post);
     Post.updateOne({ _id: req.params.id, creator: req.userData.userId }, post).then(result => {
-      if(result.nModified>0) {
         res.status(200).json({message: "Update successful!"});
-      }else{
-        res.status(401).json({message: "Not"});
-      }
     });
   }
 );

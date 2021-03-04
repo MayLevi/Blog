@@ -1,6 +1,9 @@
-const app = require("./backend/app");
+const application = require("./backend/app");
 const debug = require("debug")("node-angular");
 const http = require("http");
+const express = require('express');
+const socketIO = require('socket.io');
+
 
 const normalizePort = val => {
   var port = parseInt(val, 10);
@@ -17,6 +20,7 @@ const normalizePort = val => {
 
   return false;
 };
+
 
 const onError = error => {
   if (error.syscall !== "listen") {
@@ -50,3 +54,4 @@ const server = http.createServer(app);
 server.on("error", onError);
 server.on("listening", onListening);
 server.listen(port);
+

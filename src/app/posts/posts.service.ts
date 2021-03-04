@@ -6,6 +6,7 @@ import { Router } from "@angular/router";
 
 import { Post } from "./post.model";
 
+
 @Injectable({ providedIn: "root" })
 export class PostsService {
   private posts: Post[] = [];
@@ -28,6 +29,7 @@ export class PostsService {
                 content: post.content,
                 id: post._id,
                 imagePath: post.imagePath,
+                createDate: post.createDate,
                 creator: post.creator
               };
             }),
@@ -54,15 +56,18 @@ export class PostsService {
       title: string;
       content: string;
       imagePath: string;
+      createDate:string;
       creator: string;
     }>("http://localhost:3000/api/posts/" + id);
   }
 
   addPost(title: string, content: string, image: File) {
     const postData = new FormData();
+    const createDate= new Date();
     postData.append("title", title);
     postData.append("content", content);
     postData.append("image", image, title);
+    postData.append("createDate", createDate.toString());
     this.http
       .post<{ message: string; post: Post }>(
         "http://localhost:3000/api/posts",
@@ -73,7 +78,7 @@ export class PostsService {
       });
   }
 
-  updatePost(id: string, title: string, content: string, image: File | string) {
+  updatePost(id: string, title: string, content: string, image: File | string ,createDate:string) {
     let postData: Post | FormData;
     if (typeof image === "object") {
       postData = new FormData();
@@ -87,6 +92,7 @@ export class PostsService {
         title: title,
         content: content,
         imagePath: image,
+        createDate: createDate,
         creator:null
       };
     }
