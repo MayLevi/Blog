@@ -1,6 +1,31 @@
 const app = require("./backend/app");
 const debug = require("debug")("node-angular");
-const http = require("http");
+var express = require('express');
+var http = require('http');
+var socketIO = require('socket.io');
+
+// var app = express();
+var server = http.createServer(app);
+var socketIOServer = socketIO(server);
+
+socketIOServer.sockets.on('connection', (socket) => {
+  console.log('Socket connected');
+
+  socket.on('createPost', (post) => {
+    socketIOServer.emit('createPost', post);
+    console.log('Create Post socket emitted');
+  });
+
+  socket.on('updatePost', (post) => {
+    socketIOServer.emit('updatePost', post);
+    console.log('Update Post socket emitted');
+  });
+
+  socket.on('deletePost', (post) => {
+    socketIOServer.emit('deletePost', post);
+    console.log('Delete Post socket emitted');
+  });
+});
 
 const normalizePort = val => {
   var port = parseInt(val, 10);
@@ -46,7 +71,7 @@ const onListening = () => {
 const port = normalizePort(process.env.PORT || "3000");
 app.set("port", port);
 
-const server = http.createServer(app);
+// const server = http.createServer(app);
 server.on("error", onError);
 server.on("listening", onListening);
 server.listen(port);

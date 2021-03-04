@@ -5,6 +5,8 @@ import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 import { Post } from './post.model';
+import {AuthService} from '../auth/auth.service';
+import {PostSocketService} from './post-socket.service';
 
 
 @Injectable({ providedIn: 'root' })
@@ -12,7 +14,10 @@ export class PostsService {
   private posts: Post[] = [];
   private postsUpdated = new Subject<{ posts: Post[]; postCount: number }>();
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router,private postSocketService: PostSocketService,
+              private authService: AuthService) {
+    this.observePostSocket();
+  }
 
   getPosts(postsPerPage: number, currentPage: number) {
     const queryParams = `?pagesize=${postsPerPage}&page=${currentPage}`;
@@ -70,6 +75,7 @@ export class PostsService {
         postData
       )
       .subscribe(responseData => {
+        this.postSocketService.emitCreatePostSocket(postData);
         this.router.navigate(['/']);
       });
   }
@@ -94,6 +100,7 @@ export class PostsService {
     this.http
       .put('http://localhost:3000/api/posts/' + id, postData)
       .subscribe(response => {
+        this.postSocketService.emitUpdatePostSocket(postData);
         this.router.navigate(['/']);
       });
   }
@@ -102,4 +109,32 @@ export class PostsService {
     return this.http
       .delete('http://localhost:3000/api/posts/' + postId);
   }
+
+  private observePostSocket() {
+    this.postSocketService.receiveCreatePostSocket()
+      .subscribe((post: any) => {
+        console.log(`Create ${post.id} Post socket received`);
+        this.refreshPosts(post);
+      });
+
+    this.postSocketService.receiveUpdatePostSocket()
+      .subscribe((post: any) => {
+        console.log(`Update ${post.id} Post socket received`);
+        this.refreshPosts(post);
+      });
+
+    this.postSocketService.receiveDeletePostSocket()
+      .subscribe((post: any) => {
+        console.log(`Delete ${post.id} Post socket received`);
+        this.refreshPosts(post);
+      });
+  }
+
+  private refreshPosts(post: any) {
+    if (post.creator != this.authService.getUserId()) {
+      this.getPosts(2,1);
+    }
+  }
+
+
 }

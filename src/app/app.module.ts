@@ -22,8 +22,12 @@ import {LoginComponent} from './auth/login/login.component';
 import {SignupComponent} from './auth/signup/signup.component';
 import {AuthInterceptor} from './auth/auth-interceptor';
 import {StoryWrapperComponent} from '../react/StoryComponentWrapper';
+import {SocketIoConfig, SocketIoModule} from 'ngx-socket-io';
+import {PostSocketService} from './posts/post-socket.service';
 
-
+const socketIoConfig: SocketIoConfig = {
+  url: 'http://localhost:3000', options: {}
+};
 
 @NgModule({
   declarations: [
@@ -50,9 +54,10 @@ import {StoryWrapperComponent} from '../react/StoryComponentWrapper';
     MatPaginatorModule,
     MatProgressSpinnerModule,
     HttpClientModule,
+    SocketIoModule.forRoot(socketIoConfig)
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
-  providers: [{provide: HTTP_INTERCEPTORS, useClass:AuthInterceptor, multi:true}],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}, PostSocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
