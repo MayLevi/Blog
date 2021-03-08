@@ -9,7 +9,8 @@ export interface IMyComponentProps {
 
 export const StoryComponent: FunctionComponent<IMyComponentProps> = (props: IMyComponentProps) => {
 
-
+  //html
   return <div>
+   
   </div>;
 };

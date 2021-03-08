@@ -46,6 +46,11 @@ export class StoryWrapperComponent implements OnChanges, OnDestroy, AfterViewIni
     ReactDOM.unmountComponentAtNode(this.containerRef.nativeElement);
   }
 
+  onSaveStory()
+  {
+    //service save
+  }
+
   private render() {
 
     ReactDOM.render(<div>
