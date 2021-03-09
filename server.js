@@ -3,14 +3,17 @@ const debug = require("debug")("node-angular");
 var express = require('express');
 var http = require('http');
 var socketIO = require('socket.io');
+var cors = require('cors')
 
 // var app = express();
 var server = http.createServer(app);
 var socketIOServer = socketIO(server);
 
+
+
+
 socketIOServer.sockets.on('connection', (socket) => {
   console.log('Socket connected');
-
   socket.on('createPost', (post) => {
     socketIOServer.emit('createPost', post);
     console.log('Create Post socket emitted');

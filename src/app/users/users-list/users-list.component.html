@@ -1,7 +1,13 @@
+<mat-form-field class="example-full-width">
+  <mat-label>Search User</mat-label>
+  <input (keyup.enter)="search()" [(ngModel)]="searchString" matInput type="search">
+  <button mat-icon-button matSuffix (click)="search()">
+    <mat-icon>search</mat-icon>
+  </button>
+</mat-form-field>
+<div></div>
+<button mat-raised-button color="primary" (click)="groupByUsers()">Group Posts By Users</button>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-
-
 
   <ng-container matColumnDef="userName">
     <th mat-header-cell *matHeaderCellDef> Username </th>
@@ -17,14 +23,14 @@
       </form>
     </td>
 
-
-
   </ng-container>
 
-<!--  <ng-container matColumnDef="numberOfPosts">-->
-<!--    <th mat-header-cell *matHeaderCellDef> Number Of Posts </th>-->
-<!--    <td mat-cell *matCellDef="let user"> {{user.weight}} </td>-->
-<!--  </ng-container>-->
+    <ng-container matColumnDef="numberOfPosts">
+      <th mat-header-cell *matHeaderCellDef> Number Of Posts </th>
+      <td mat-cell *matCellDef="let user"><p *ngIf="!groupBySelected">Use Group By</p><p *ngIf="groupBySelected">{{user.numberOfPost}}</p></td>
+    </ng-container>
+
+
 
   <ng-container  matColumnDef="Action">
     <th mat-header-cell *matHeaderCellDef> Actions </th>

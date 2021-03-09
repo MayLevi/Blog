@@ -3,6 +3,7 @@ import {UsersService} from '../users.service';
 import {AuthService} from '../../auth/auth.service';
 import {User} from '../user';
 import {MatTableDataSource} from '@angular/material';
+import {PostsService} from '../../posts/posts.service';
 
 
 
@@ -17,11 +18,13 @@ export class UsersListComponent implements OnInit {
 
   currentUser : User;
   allUsers : User[];
-  displayedColumns: string[] = ['userName','Action'];
+  displayedColumns: string[] = ['userName','numberOfPosts','Action'];
   dataSource = new MatTableDataSource<User>();
   userEditMode: any[] = [];
+  searchString: any;
+  groupBySelected = false;
 
-  constructor(public usersService:UsersService,private authService:AuthService) {
+  constructor(public usersService:UsersService,private authService:AuthService,private  postsService:PostsService) {
 
   }
 
@@ -62,6 +65,26 @@ export class UsersListComponent implements OnInit {
   deleteUser(user) {
     this.usersService.deleteUser(user._id).subscribe(() => {
       this.loadUsers();
+    })
+  }
+
+  search() {
+    if(this.searchString)
+    {
+      this.dataSource.data = this.allUsers.filter(user =>  user.email.toLowerCase().indexOf(this.searchString.toLowerCase()) >= 0 );
+    }
+    else{
+      this.dataSource.data = this.allUsers;
+    }
+  }
+
+  groupByUsers()
+  {
+    this.groupBySelected = true;
+    this.postsService.groupByUsers().subscribe(posts => {
+      posts.forEach(post => {
+        this.allUsers.find(user => user._id == post._id).numberOfPost = post.count;
+      })
     })
   }
 }

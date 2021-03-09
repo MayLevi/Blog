@@ -56,7 +56,7 @@ router.post(
 );
 
 router.put(
-  "/:id",checkAuth,
+  "post/:id",checkAuth,
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
     let imagePath = req.body.imagePath;
@@ -100,7 +100,7 @@ router.get("", (req, res, next) => {
     });
 });
 
-router.get("/:id", (req, res, next) => {
+router.get("post/:id", (req, res, next) => {
   Post.findById(req.params.id).then(post => {
     if (post) {
       res.status(200).json(post);
@@ -110,7 +110,7 @@ router.get("/:id", (req, res, next) => {
   });
 });
 
-router.delete("/:id",checkAuth, (req, res, next) => {
+router.delete("post/:id",checkAuth, (req, res, next) => {
   Post.deleteOne({ _id: req.params.id , creator: req.userData.userId }).then(result => {
     if(result.n>0) {
       res.status(200).json({message: "Update successful!"});
@@ -120,17 +120,22 @@ router.delete("/:id",checkAuth, (req, res, next) => {
   });
 });
 
-//group by
-router.get("/user/:id", (req, res, next) => {
-  Post.aggregate([
-    {"$group" : {_id:"$province", count:{$sum:1}}}
-  ]).then(post => {
-    if (post) {
-      res.status(200).json(post);
-    } else {
-      res.status(404).json({ message: "Post not found!" });
+// group by
+router.get("/gbu",(req,res,next) => {
+  Post.aggregate([{
+    "$group": {
+      _id: "$creator",
+      count: {
+        $sum: 1
+      }
     }
-  });
-});
+  }]).then(posts => {
+    if (posts) {
+      res.status(200).json(posts);
+    } else {
+      res.status(404).json({ message: "Posts not found!" });
+    }
+  })
+ });
 
 module.exports = router;
