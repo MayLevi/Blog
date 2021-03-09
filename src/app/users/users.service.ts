@@ -17,4 +17,23 @@ export class UsersService {
     return this.http.get<User[]>('http://localhost:3000/api/user/');
   }
 
+  updateUser(user : User,newUsername : any) {
+    let userData: any;
+    userData = {
+      id: user._id,
+      email: newUsername,
+      password: user.password,
+      isAdmin: user.isAdmin,
+    };
+    this.http
+      .put('http://localhost:3000/api/user/' + user._id, userData)
+      .subscribe(response => {
+      });
+  }
+
+  deleteUser(userId: string) {
+    return this.http
+      .delete('http://localhost:3000/api/user/' + userId);
+  }
+
 }

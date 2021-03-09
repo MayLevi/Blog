@@ -86,4 +86,29 @@ router.get("", (req, res, next) => {
   });
 });
 
+router.put(
+  "/:id",
+  (req, res, next) => {
+    const user = new User({
+      _id: req.body.id,
+      email: req.body.email,
+      password: req.body.password,
+      isAdmin: req.body.isAdmin,
+    });
+    User.updateOne({ _id: req.body.id }, user).then(result => {
+      res.status(200).json({message: "Update successful!"});
+    });
+  }
+);
+
+router.delete("/:id", (req, res, next) => {
+  User.deleteOne({ _id: req.params.id }).then(result => {
+    if(result.n>0) {
+      res.status(200).json({message: "Update successful!"});
+    }else{
+      res.status(401).json({message: "Not"});
+    }
+  });
+});
+
 module.exports = router;
