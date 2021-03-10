@@ -26,6 +26,9 @@ import {SocketIoConfig, SocketIoModule} from 'ngx-socket-io';
 import {PostSocketService} from './posts/post-socket.service';
 import { UsersListComponent } from './users/users-list/users-list.component';
 import {MatSelectModule} from '@angular/material/select';
+import { StatisticsComponent } from './statistics/statistics.component';
+import { BarChartComponent } from './bar-chart/bar-chart.component';
+import { PieChartComponent } from './pie-chart/pie-chart.component';
 
 
 const socketIoConfig: SocketIoConfig = {
@@ -42,6 +45,9 @@ const socketIoConfig: SocketIoConfig = {
     SignupComponent,
     StoryWrapperComponent,
     UsersListComponent,
+    StatisticsComponent,
+    BarChartComponent,
+    PieChartComponent,
   ],
   imports: [
     BrowserModule,
