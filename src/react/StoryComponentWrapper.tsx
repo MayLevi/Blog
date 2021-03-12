@@ -48,6 +48,7 @@ export class StoryWrapperComponent implements OnChanges, OnDestroy, AfterViewIni
 
   onSaveStory()
   {
+    console.log("hey");
     //service save
   }
 

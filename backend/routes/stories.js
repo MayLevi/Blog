@@ -36,17 +36,17 @@ router.post(
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
-    const post = new Story({
+    const story = new Story({
       imagePath: url + "/images/" + req.file.filename,
       creator: req.userData.userId,
       createDate: new Date()
     });
-    post.save().then(createdPost => {
+    story.save().then(createdStory => {
       res.status(201).json({
-        message: "Post added successfully",
-        post: {
-          ...createdPost,
-          id: createdPost._id
+        message: "story added successfully",
+        story: {
+          ...createdStory,
+          id: createdStory._id
         }
       });
     });
@@ -62,13 +62,13 @@ router.put(
       const url = req.protocol + "://" + req.get("host");
       imagePath = url + "/images/" + req.file.filename;
     }
-    const post = new Story({
+    const story = new Story({
       _id: req.body.id,
       imagePath: imagePath,
       creator: req.userData.userId
     });
-    console.log(post);
-    Story.updateOne({ _id: req.params.id, creator: req.userData.userId }, post).then(result => {
+    console.log(story);
+    Story.updateOne({ _id: req.params.id, creator: req.userData.userId }, story).then(result => {
         res.status(200).json({message: "Update successful!"});
     });
   }
@@ -77,31 +77,31 @@ router.put(
 router.get("", (req, res, next) => {
   const pageSize = +req.query.pagesize;
   const currentPage = +req.query.page;
-  const postQuery = Story.find();
-  let fetchedPosts;
+  const storyQuery = Story.find();
+  let fetchedStories;
   if (pageSize && currentPage) {
-    postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
+    storyQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
   }
-  postQuery
+  storyQuery
     .then(documents => {
-      fetchedPosts = documents;
+      fetchedStories = documents;
       return Story.count();
     })
     .then(count => {
       res.status(200).json({
         message: "Story fetched successfully!",
         story: fetchedStory,
-        maxPosts: count
+        maxStories: count
       });
     });
 });
 
 router.get("/:id", (req, res, next) => {
-  Story.findById(req.params.id).then(post => {
-    if (post) {
-      res.status(200).json(post);
+  Story.findById(req.params.id).then(story => {
+    if (story) {
+      res.status(200).json(story);
     } else {
-      res.status(404).json({ message: "Post not found!" });
+      res.status(404).json({ message: "story not found!" });
     }
   });
 });
@@ -120,11 +120,11 @@ router.delete("/:id",checkAuth, (req, res, next) => {
 router.get("/user/:id", (req, res, next) => {
   Story.aggregate([
     {"$group" : {_id:"$province", count:{$sum:1}}}
-  ]).then(post => {
-    if (post) {
-      res.status(200).json(post);
+  ]).then(story => {
+    if (story) {
+      res.status(200).json(story);
     } else {
-      res.status(404).json({ message: "Post not found!" });
+      res.status(404).json({ message: "story not found!" });
     }
   });
 });
