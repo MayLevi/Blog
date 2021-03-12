@@ -1,5 +1,5 @@
 <mat-spinner *ngIf="isLoading"></mat-spinner>
-<app-story-component></app-story-component>
+
 <mat-accordion multi="true" *ngIf="posts.length > 0 && !isLoading">
   <mat-form-field class="example-full-width">
     <mat-label>Search Post</mat-label>
@@ -37,3 +37,4 @@
 <mat-paginator [length]="totalPosts" [pageSize]="postsPerPage" [pageSizeOptions]="pageSizeOptions" (page)="onChangedPage($event)"
                *ngIf="posts.length > 0"></mat-paginator>
 <p class="info-text mat-body-1" *ngIf="posts.length <= 0 && !isLoading">No posts added yet!</p>
+<app-story-component></app-story-component>

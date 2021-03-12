@@ -58,4 +58,4 @@ export class StoryWrapperComponent implements OnChanges, OnDestroy, AfterViewIni
       <StoryComponent/>
     </div>, this.containerRef.nativeElement);
   }
-}
+} 

@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
     if (isValid) {
       error = null;
     }
-    cb(error, "backend/images");
+    cb(error, "backend/stories");
   },
   filename: (req, file, cb) => {
     const name = file.originalname
@@ -36,8 +36,10 @@ router.post(
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
     const url = req.protocol + "://" + req.get("host");
+    console.log(url);
     const story = new Story({
-      imagePath: url + "/images/" + req.file.filename,
+      
+      imagePath: url + "/stories/" + req.file.filename,
       creator: req.userData.userId,
       createDate: new Date()
     });
@@ -60,7 +62,7 @@ router.put(
     let imagePath = req.body.imagePath;
     if (req.file) {
       const url = req.protocol + "://" + req.get("host");
-      imagePath = url + "/images/" + req.file.filename;
+      imagePath = url + "/stories/" + req.file.filename;
     }
     const story = new Story({
       _id: req.body.id,
@@ -79,25 +81,27 @@ router.get("", (req, res, next) => {
   const currentPage = +req.query.page;
   const storyQuery = Story.find();
   let fetchedStories;
-  if (pageSize && currentPage) {
+  if (pageSize && currentPage ) {
     storyQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
   }
   storyQuery
     .then(documents => {
-      fetchedStories = documents;
+      fetchedStories = documents
       return Story.count();
     })
     .then(count => {
       res.status(200).json({
         message: "Story fetched successfully!",
-        story: fetchedStory,
+        story: fetchedStories,
         maxStories: count
       });
     });
 });
 
 router.get("/:id", (req, res, next) => {
+  console.log(req.params.id);
   Story.findById(req.params.id).then(story => {
+    
     if (story) {
       res.status(200).json(story);
     } else {
@@ -107,6 +111,7 @@ router.get("/:id", (req, res, next) => {
 });
 
 router.delete("/:id",checkAuth, (req, res, next) => {
+  console.log("heyyyy");
   Story.deleteOne({ _id: req.params.id , creator: req.userData.userId }).then(result => {
     if(result.n>0) {
       res.status(200).json({message: "Update successful!"});
