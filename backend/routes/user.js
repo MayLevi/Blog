@@ -11,7 +11,8 @@ router.post("/signup", (req, res, next) => {
     const user = new User({
       email: req.body.email,
       password: hash,
-      isAdmin: false
+      isAdmin: false,
+      createDate: new Date()
     });
     user
       .save()

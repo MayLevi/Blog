@@ -4,4 +4,5 @@ export class User {
   password:string;
   isAdmin:boolean;
   numberOfPost:number;
+  createDate: Date;
 }

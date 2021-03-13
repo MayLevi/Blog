@@ -5,6 +5,15 @@
     <mat-icon>search</mat-icon>
   </button>
 </mat-form-field>
+<span style="padding-right: 3%"></span>
+<mat-form-field appearance="fill">
+  <mat-label>Search by Filter</mat-label>
+  <mat-select [(ngModel)]="selectedFilter">
+    <mat-option value="Username">Username</mat-option>
+    <mat-option value="numOfPosts">Higher Number Of Posts</mat-option>
+    <mat-option value="Year">User Create Year</mat-option>
+  </mat-select>
+</mat-form-field>
 <div></div>
 <button mat-raised-button color="primary" (click)="groupByUsers()">Group Posts By Users</button>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -35,9 +44,9 @@
   <ng-container  matColumnDef="Action">
     <th mat-header-cell *matHeaderCellDef> Actions </th>
     <td mat-cell *matCellDef="let user">
-      <button (click)="userEditMode[user.email] = true" mat-raised-button color="primary">Edit</button>
+      <button *ngIf="currentUser.isAdmin" (click)="userEditMode[user.email] = true" mat-raised-button color="primary">Edit</button>
       <span style="padding-right: 2%"></span>
-      <button (click)="deleteUser(user)" mat-raised-button color="warn">Delete</button> </td>
+      <button *ngIf="currentUser.isAdmin" (click)="deleteUser(user)" mat-raised-button color="warn">Delete</button> </td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

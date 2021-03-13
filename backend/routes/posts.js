@@ -138,4 +138,26 @@ router.get("/gbu",(req,res,next) => {
   })
  });
 
+
+
+// MapReduce
+router.get("/mr",(req,res,next) => {
+  const o = {};
+  o.map = 'function () { emit(this.Title, 1) }';
+  o.reduce = 'function (k, vals) { return vals.length }';
+  o.out = { replace: 'createdCollectionNameForResults' }
+  o.verbose = true;
+  Post.mapReduce(o, function (err, model, stats) {
+    Post.find().where('value').gt(1).exec(function (err, docs) {
+    });
+  }).then(posts => {
+    if (posts) {
+      res.status(200).json(posts);
+    } else {
+      res.status(404).json({ message: "Posts not found!" });
+    }
+  })
+
+})
+
 module.exports = router;

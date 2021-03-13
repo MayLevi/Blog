@@ -4,22 +4,12 @@ import * as d3 from 'd3-selection';
 import * as d3Scale from 'd3-scale';
 import * as d3Array from 'd3-array';
 import * as d3Axis from 'd3-axis';
+import {UsersService} from '../users/users.service';
+import {PostsService} from '../posts/posts.service';
 
-export interface Employee {
-  company: string;
-  frequency: number;
-}
 
-export const StatsBarChart: Employee[] = [
-  {company: 'Apple', frequency: 100000},
-  {company: 'IBM', frequency: 80000},
-  {company: 'HP', frequency: 20000},
-  {company: 'Facebook', frequency: 70000},
-  {company: 'TCS', frequency: 12000},
-  {company: 'Google', frequency: 110000},
-  {company: 'Wipro', frequency: 5000},
-  {company: 'EMC', frequency: 4000}
-];
+
+
 
 @Component({
   selector: 'app-bar-chart',
@@ -28,7 +18,7 @@ export const StatsBarChart: Employee[] = [
 })
 export class BarChartComponent implements OnInit {
   currentRate = 8;
-  title = 'D3 Barchart with Angular 10';
+  title = 'Post Counters per Users';
   width: number;
   height: number;
   margin = { top: 20, right: 20, bottom: 30, left: 40 };
@@ -36,17 +26,31 @@ export class BarChartComponent implements OnInit {
   y: any;
   svg: any;
   g: any;
-
-  constructor() {
+  StatsBarChart: any[] = [];
+  constructor(private userService:UsersService,private  postsService: PostsService) {
     this.width = 900 - this.margin.left - this.margin.right;
     this.height = 500 - this.margin.top - this.margin.bottom;
   }
 
   ngOnInit() {
-    this.initSvg();
-    this.initAxis();
-    this.drawAxis();
-    this.drawBars();
+    this.userService.getAllUsers().subscribe(users => {
+      this.postsService.groupByUsers().subscribe(posts => {
+        posts.forEach(post => {
+          users.find(user => user._id == post._id).numberOfPost = post.count;
+        })
+
+        users.forEach(user => {
+          if(user.numberOfPost){
+            this.StatsBarChart.push({email: user.email, numberOfPost: user.numberOfPost});
+          }
+        })
+        this.initSvg();
+        this.initAxis();
+        this.drawAxis();
+        this.drawBars();
+      })
+    })
+
   }
 
   initSvg() {
@@ -62,8 +66,8 @@ export class BarChartComponent implements OnInit {
   initAxis() {
     this.x = d3Scale.scaleBand().rangeRound([0, this.width]).padding(0.1);
     this.y = d3Scale.scaleLinear().rangeRound([this.height, 0]);
-    this.x.domain(StatsBarChart.map((d) => d.company));
-    this.y.domain([0, d3Array.max(StatsBarChart, (d) => d.frequency)]);
+    this.x.domain(this.StatsBarChart.map((d) => d.email));
+    this.y.domain([0, d3Array.max(this.StatsBarChart, (d) => d.numberOfPost)]);
   }
 
   drawAxis() {
@@ -85,14 +89,14 @@ export class BarChartComponent implements OnInit {
 
   drawBars() {
     this.g.selectAll('.bar')
-      .data(StatsBarChart)
+      .data(this.StatsBarChart)
       .enter().append('rect')
       .attr('class', 'bar')
-      .attr('x', (d) => this.x(d.company))
-      .attr('y', (d) => this.y(d.frequency))
+      .attr('x', (d) => this.x(d.email))
+      .attr('y', (d) => this.y(d.numberOfPost))
       .attr('width', this.x.bandwidth())
       .attr('fill', '#498bfc')
-      .attr('height', (d) => this.height - this.y(d.frequency));
+      .attr('height', (d) => this.height - this.y(d.numberOfPost));
   }
 
 }

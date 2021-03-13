@@ -11,11 +11,11 @@
   <span style="padding-right: 3%"></span>
   <mat-form-field appearance="fill">
     <mat-label>Search by Filter</mat-label>
-    <select [(ngModel)]="selectedFilter"  matNativeControl required>
-      <option value="postName">Post Title</option>
-      <option value="userName">Username</option>
-      <option value="Year">Year</option>
-    </select>
+    <mat-select [(ngModel)]="selectedFilter" >
+      <mat-option value="postName">Post Title</mat-option>
+      <mat-option value="userName">Username</mat-option>
+      <mat-option value="Year">Year</mat-option>
+    </mat-select>
   </mat-form-field>
 
   <mat-expansion-panel *ngFor="let post of displayPosts">

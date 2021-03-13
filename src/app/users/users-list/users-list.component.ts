@@ -16,12 +16,13 @@ import {PostsService} from '../../posts/posts.service';
 })
 export class UsersListComponent implements OnInit {
 
-  currentUser : User;
+  currentUser : User = new User();
   allUsers : User[];
   displayedColumns: string[] = ['userName','numberOfPosts','Action'];
   dataSource = new MatTableDataSource<User>();
   userEditMode: any[] = [];
   searchString: any;
+  selectedFilter ='Username';
   groupBySelected = false;
 
   constructor(public usersService:UsersService,private authService:AuthService,private  postsService:PostsService) {
@@ -68,15 +69,34 @@ export class UsersListComponent implements OnInit {
     })
   }
 
-  search() {
-    if(this.searchString)
-    {
-      this.dataSource.data = this.allUsers.filter(user =>  user.email.toLowerCase().indexOf(this.searchString.toLowerCase()) >= 0 );
+ async search() {
+    if(this.searchString){
+      switch (this.selectedFilter)
+      {
+        case "Username":
+          this.dataSource.data = this.allUsers.filter(user =>  user.email.toLowerCase().indexOf(this.searchString.toLowerCase()) >= 0 );
+          break;
+        case "numOfPosts":
+          this.groupBySelected = true;
+          this.postsService.groupByUsers().subscribe(posts => {
+            posts.forEach(post => {
+              this.allUsers.find(user => user._id == post._id).numberOfPost = post.count;
+            });
+            this.dataSource.data = this.allUsers.filter(user =>  user.numberOfPost >=  +this.searchString);
+          })
+          break;
+        case "Year":
+          this.dataSource.data = this.allUsers.filter(user =>  new Date(user.createDate).getFullYear() == this.searchString );
+          break;
+      }
     }
     else{
       this.dataSource.data = this.allUsers;
     }
+
   }
+
+
 
   groupByUsers()
   {

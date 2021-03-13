@@ -38,7 +38,7 @@ router.post(
     const url = req.protocol + "://" + req.get("host");
     console.log(url);
     const story = new Story({
-      
+
       imagePath: url + "/stories/" + req.file.filename,
       creator: req.userData.userId,
       createDate: new Date()
@@ -101,7 +101,7 @@ router.get("", (req, res, next) => {
 router.get("/:id", (req, res, next) => {
   console.log(req.params.id);
   Story.findById(req.params.id).then(story => {
-    
+
     if (story) {
       res.status(200).json(story);
     } else {
@@ -111,7 +111,6 @@ router.get("/:id", (req, res, next) => {
 });
 
 router.delete("/:id",checkAuth, (req, res, next) => {
-  console.log("heyyyy");
   Story.deleteOne({ _id: req.params.id , creator: req.userData.userId }).then(result => {
     if(result.n>0) {
       res.status(200).json({message: "Update successful!"});

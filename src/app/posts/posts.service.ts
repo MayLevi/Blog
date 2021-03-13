@@ -114,6 +114,8 @@ export class PostsService {
      return this.http.get<any[]>(this.postUrl +'gbu' );
   }
 
+
+
   deletePost(postId: string) {
     return this.http
       .delete(this.postUrl +'post/' + postId);
