@@ -22,7 +22,6 @@ import {LoginComponent} from './auth/login/login.component';
 import {SignupComponent} from './auth/signup/signup.component';
 import {AuthInterceptor} from './auth/auth-interceptor';
 import {StoryWrapperComponent} from '../react/StoryComponentWrapper';
-import {} from '../react/Components/StoriesComponentWrapper';
 import {SocketIoConfig, SocketIoModule} from 'ngx-socket-io';
 import {PostSocketService} from './posts/post-socket.service';
 import { UsersListComponent } from './users/users-list/users-list.component';

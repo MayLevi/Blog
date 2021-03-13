@@ -7,12 +7,13 @@ import axios from 'axios';
 export interface IMyComponentProps {
 
 
-  
+
 }
 
 
 export const StoryComponent: FunctionComponent<IMyComponentProps> = (props: IMyComponentProps) => {
- 
+
+
   const [Storystate , onChangeStoryState] = useState({
     selectedFile: null
   });
@@ -25,21 +26,22 @@ export const StoryComponent: FunctionComponent<IMyComponentProps> = (props: IMyC
     storiesArr: null
   });
 
-  const onStoryChange = (event) => 
+  const onStoryChange = (event) =>
   {
     onChangeStoryState({selectedFile:event.target.files[0]});
-  
+
   }
 
   const onStoryClicked = (event) => {
+
     const fd = new FormData();
     fd.append('image' , Storystate.selectedFile, Storystate.selectedFile.name);
     const token= localStorage.getItem("token");
     const expirationDate=localStorage.getItem("expiration");
     const userId=localStorage.getItem("userId");
-    
+
      axios.post('http://localhost:3000/api/stories/' , fd, {
-      headers:{ 
+      headers:{
         Authorization:  "Bearer " + token,
         expirationDate: expirationDate,
         userId: userId
@@ -52,9 +54,9 @@ export const StoryComponent: FunctionComponent<IMyComponentProps> = (props: IMyC
     const expirationDate=localStorage.getItem("expiration");
     const userId=localStorage.getItem("userId");
 
-    axios.get("http://localhost:3000/api/stories/", 
+    axios.get("http://localhost:3000/api/stories/",
     {
-      headers: { 
+      headers: {
         Authorization:  "Bearer " + token,
         expirationDate: expirationDate,
         userId: userId
@@ -80,7 +82,7 @@ export const StoryComponent: FunctionComponent<IMyComponentProps> = (props: IMyC
     const userId=localStorage.getItem("userId");
 
     axios.delete("http://localhost:3000/api/stories/" + id , {
-      headers:{ 
+      headers:{
         Authorization:  "Bearer " + token,
         expirationDate: expirationDate,
         userId: userId
@@ -94,17 +96,20 @@ export const StoryComponent: FunctionComponent<IMyComponentProps> = (props: IMyC
 
 
   //html
+
   return (
-    <div>
-      <div className="div">  
+  <div>
+
+      <div className="div">
         <input type="file" accept='image/png, image/jpeg' onChange= {onStoryChange}/>
-        <button className="button" onClick={onStoryClicked}>Upload</button>
+        <div></div>
+        <button type="button"  className="button" onClick={onStoryClicked}>Upload</button>
       </div>
-      <div className="div">  
+      <div className="div">
         <button className="button" onClick={getAllStories}>Get All Stories</button>
       </div>
       <div className="div2">
           {StoriesArraystate.storiesArr? <div>{StoriesArraystate.storiesArr}</div> : null}
-      </div> 
+      </div>
       </div>);
 };

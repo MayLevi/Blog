@@ -15,6 +15,7 @@ import { StoryComponent } from 'src/react/StoryComponent';
 import * as React from 'react';
 
 import * as ReactDOM from 'react-dom';
+import {AuthService} from '../app/auth/auth.service';
 
 const containerElementName = 'storyComponentContainer';
 
@@ -27,9 +28,10 @@ const containerElementName = 'storyComponentContainer';
 export class StoryWrapperComponent implements OnChanges, OnDestroy, AfterViewInit {
   @ViewChild(containerElementName, {static: false}) containerRef: ElementRef;
 
+  public logIn = false;
 
-
-  constructor() {
+  constructor(public authService :AuthService) {
+    this.logIn = this.authService.getIsAuth();
   }
 
 
@@ -46,16 +48,11 @@ export class StoryWrapperComponent implements OnChanges, OnDestroy, AfterViewIni
     ReactDOM.unmountComponentAtNode(this.containerRef.nativeElement);
   }
 
-  onSaveStory()
-  {
-    console.log("hey");
-    //service save
-  }
 
   private render() {
 
     ReactDOM.render(<div>
-      <StoryComponent/>
+      {this.logIn && <StoryComponent/>}
     </div>, this.containerRef.nativeElement);
   }
-} 
+}
