@@ -47,7 +47,7 @@ export const StoryComponent: FunctionComponent<IMyComponentProps> = (props: IMyC
      }).then( res => {console.log(res)}).catch(error => {console.log(error)})
   }
 
-  const getAllStories = event => {
+  const getAllStories = () => {
     const token= localStorage.getItem("token");
     const expirationDate=localStorage.getItem("expiration");
     const userId=localStorage.getItem("userId");
@@ -86,7 +86,9 @@ export const StoryComponent: FunctionComponent<IMyComponentProps> = (props: IMyC
         userId: userId
       }
      }
-    ).then(res => console.log(res)).catch(err => console.log(err));
+    ).then(res => {console.log(res)
+      getAllStories();
+    }).catch(err => console.log(err));
     console.log("http://localhost:3000/api/stories/:"+ id)
   }
 
